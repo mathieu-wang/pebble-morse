@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "mathieu.sy.wang@gmail.com",
+    "longName": "pebble-morse",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "pebble-morse",
+    "uuid": "677e2f78-b493-4b40-bd4e-4640bab4ea09",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
