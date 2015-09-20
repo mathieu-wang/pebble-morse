@@ -156,6 +156,10 @@ static void answer_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_i
 
 /* handler for going to choose answer page */
 static void start_answering_click_handler(ClickRecognizerRef recognizer, void *context) {
+  Level current_level = levels[level-1];
+  char* str = current_level.answers[current_level.index_correct_answer];
+  call_vib(str);
+  
   text_layer_destroy(s_question_layer);
   switch_to_choose_answer_page(s_main_window);
 }
@@ -206,13 +210,13 @@ static void switch_to_question_page(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_frame(window_layer);
   
-  static char question_string[80];
+  static char question_string[100];
   strcpy(question_string, "Level ");
   
   char snum[20];
   int_to_string(snum, level);
   strcat(question_string, snum);
-  strcat(question_string, ": \nListen and identify the Morse Code...\n\nPress Select to answer!");
+  strcat(question_string, ": \nFeel the vibrations and identify the Morse Code...\n\nPress Select to start!");
   
   s_question_layer = text_layer_create(GRect(5, 0, bounds.size.w - 5, bounds.size.h));
   text_layer_set_font(s_question_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
@@ -221,10 +225,6 @@ static void switch_to_question_page(Window *window) {
   
   layer_add_child(window_layer, text_layer_get_layer(s_question_layer));
   window_set_click_config_provider(s_main_window, click_config_provider_question_page);
-  
-  Level current_level = levels[level-1];
-  char* str = current_level.answers[current_level.index_correct_answer];
-  call_vib(str);
 }
 
 static void switch_to_choose_answer_page(Window *window) {
