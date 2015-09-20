@@ -1,18 +1,16 @@
-# pebble-morse
+# Pebble-Morse
 
-Pebble-Morse is a simple and instructive game, allowing anyone to learn Morse Code, while having loads of fun. It is a standalone Pebble Watchapp, meaning that it does not need a mobile companion application.
+Pebble-Morse is a simple game that helps people learn Morse Code while having lots of fun. It is a standalone Pebble Watchapp and does not need a mobile companion application.
 
-Pebble-Morse has 3 levels of difficulty, each with 10 levels. 
+Pebble-Morse has 3 levels of difficulty, each having 10 stages. At each stage, the player receives a series of vibrations, representing either a letter, a word, or an expression in Morse Code. The player will then try to select the correct answer from a list of 3 options.
+The harder the level is, the faster the vibration pattern is played. The stages within a level also have increasingly longer and more complex patterns to recognize. 
 
-At each stage, the player receives a series of vibrations, representing either a letter, a word, or a sentence in Morse Code.
-
-Then the player must choose the right answer corresponding to the Morse Code that he or she just observed.
-
-The player gains 10 points for each correct response, and 0 for an incorrect one.
-
+The player gets 10 points for each correct response, and 0 for an incorrect one.
 A local high score is kept in the app to show the player's progress.
 
-Authors
-Ze Qian Zhang
-Mathieu Wang
-Cheng Gong
+To help the players learn, the app also has a reference page that shows the pattern for every letter in the English alphabet.
+
+##Authors
+*Ze Qian Zhang
+*Mathieu Wang
+*Cheng Gong
