@@ -314,22 +314,17 @@ void call_vib(char *word) {
      char *morse_code = getMorseCode(word[i]);
      for(int j = 0; morse_code[j] != '\0'; j++) {
          printf("%c\n", morse_code[j]);
-         switch(morse_code[j]) {
-            case DASH:
-               dash();
-               letter_gap();
-               break;
-            case DOT:
-               dot();
-               letter_gap();
-               break;
-            default:
-                break;
+         if (morse_code[j] == '.') {
+           dot();
+           printf("dot is called");
+         } else { //cannot be space
+           dash();
+           printf("dash is called");
          }
+     }
+     letter_gap();
    }
    word_gap();
-   // after one word, call sleep x sec.
-   }
 }
 
 

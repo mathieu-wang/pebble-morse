@@ -1,16 +1,15 @@
 #include <pebble.h>
 #include "morse.h"
-#include "level.h"
+//#include "level.h"
 
 Window *window;
 TextLayer *text_layer;
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   //for testing:
-  randomize_correct_answer_index();
-  dash();
-  dot();
-  dash();
+  //randomize_correct_answer_index();
+  char* str = "sos";
+  call_vib(str);
 }
 
 static void click_config_provider(void *context) {
@@ -18,7 +17,7 @@ static void click_config_provider(void *context) {
 }
 
 void handle_init(void) {
-  randomize_correct_answer_index();
+//   randomize_correct_answer_index();
 	// Create a window and text layer
 	window = window_create();
 	text_layer = text_layer_create(GRect(0, 0, 144, 154));
