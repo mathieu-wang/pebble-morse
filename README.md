@@ -12,11 +12,16 @@ At each stage, the player receives a series of vibrations, representing either a
 
 The harder the level is, the faster the vibration pattern is played. The stages within a level also have increasingly longer and more complex patterns to recognize. 
 
+![img 3](img/Screenshot 2015-09-20 08.16.58.png)
 
 The player gets 10 points for each correct response, and 0 for an incorrect one.
 A local high score is kept in the app to show the player's progress.
 
+![img 4](img/Screenshot 2015-09-20 08.03.04.png)
+
 To help the players learn, the app also has a reference page that shows the pattern for every letter in the English alphabet.
+
+![img 5](img/Screenshot 2015-09-20 08.01.08.png)
 
 #Authors
 
