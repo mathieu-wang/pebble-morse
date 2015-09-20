@@ -10,7 +10,6 @@ A local high score is kept in the app to show the player's progress.
 
 To help the players learn, the app also has a reference page that shows the pattern for every letter in the English alphabet.
 
-##Authors
-*Ze Qian Zhang
-*Mathieu Wang
-*Cheng Gong
+#Authors
+
+Ze Qian Zhang, Mathieu Wang, Cheng Gong
