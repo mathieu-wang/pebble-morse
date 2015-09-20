@@ -46,8 +46,8 @@ void handle_deinit(void) {
 	window_destroy(window);
 }
 
-int main(void) {
-	handle_init();
-	app_event_loop();
-	handle_deinit();
-}
+// int main(void) {
+// 	handle_init();
+// 	app_event_loop();
+// 	handle_deinit();
+// }
