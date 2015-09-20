@@ -12,10 +12,3 @@ void dash();
 void letter_gap();
 void word_gap();
 char* getMorseCode(char c);
-
-
-
-void chars_to_vibes(char* chars);
-
-
-

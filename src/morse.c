@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "morse.h"
 
 const uint32_t const unit_length = 200; //ms
 char* MORSE_CODES[] = {
