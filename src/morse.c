@@ -44,4 +44,27 @@ void word_gap() {
   vibrate(segments);
 }
 
+void call_vib(char *word) {
+   for(int i = 0; word[i] != '\0'; i++) {
+     char *morse_code = getMorseCode(word[i]);
+     for(int j = 0; morse_code[j] != '\0'; j++) {
+         printf("%c\n", morse_code[j]);
+         switch(morse_code[j]):
+         case "-":
+            dash();
+            letter_gap();
+         case ".":
+            dot();
+            letter_gap();
+         default:
+             break;
+   }
+   word_gap();
+   // after one word, call sleep x sec.
+   }
+}
+
+
+    
+
 
