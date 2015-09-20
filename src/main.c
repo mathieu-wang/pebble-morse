@@ -106,13 +106,13 @@ static void difficulty_menu_draw_row_callback(GContext* ctx, const Layer *cell_l
       // Use the row to specify which item we'll draw
       switch (cell_index->row) {
         case 0:
-          menu_cell_basic_draw(ctx, cell_layer, "Beginner", "Noobs", NULL);
+          menu_cell_basic_draw(ctx, cell_layer, "Beginner", "Noob", NULL);
           break;
         case 1:
-          menu_cell_basic_draw(ctx, cell_layer, "Intermediate", "Still a noob", NULL);
+          menu_cell_basic_draw(ctx, cell_layer, "Intermediate", "Still a Noob", NULL);
           break;
         case 2: 
-          menu_cell_basic_draw(ctx, cell_layer, "Hard", "Expert", NULL);
+          menu_cell_basic_draw(ctx, cell_layer, "Advanced", "Telegraph Operator", NULL);
           break;
       }
   }
