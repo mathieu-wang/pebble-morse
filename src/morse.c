@@ -326,8 +326,3 @@ void call_vib(char *word) {
    }
    word_gap();
 }
-
-
-    
-
-

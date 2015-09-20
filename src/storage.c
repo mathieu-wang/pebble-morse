@@ -28,4 +28,3 @@ void write_stage_to_storage(int stage) {
 void write_level_to_storage(int level) {
    persist_write_int(CURRENT_LEVEL_KEY, level);   
 }
-
