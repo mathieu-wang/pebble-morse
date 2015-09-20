@@ -4,6 +4,7 @@
 #include "morse.h"
 #include "level.h"
 #include <stdbool.h>
+#include "storage.h"
 
 #define NUM_MENU_SECTIONS 2
 #define NUM_GAME_MENU_ITEMS 3
@@ -15,6 +16,8 @@
 #define MAX_LEVEL 10
 int level = 1;
 int score = 0;
+int high_score = 0;
+int high_score_need_update = 0;
 
 static Window *s_main_window;
 static TextLayer *s_question_layer;
@@ -106,13 +109,14 @@ static void difficulty_menu_draw_row_callback(GContext* ctx, const Layer *cell_l
       // Use the row to specify which item we'll draw
       switch (cell_index->row) {
         case 0:
-          menu_cell_basic_draw(ctx, cell_layer, "Beginner", "Noob", NULL);
+          menu_cell_basic_draw(ctx, cell_layer, "Beginner", "Noobs", NULL);
           break;
         case 1:
-          menu_cell_basic_draw(ctx, cell_layer, "Intermediate", "Still a Noob", NULL);
+          
+          menu_cell_basic_draw(ctx, cell_layer, "Intermediate", "Still a noob", NULL);
           break;
         case 2: 
-          menu_cell_basic_draw(ctx, cell_layer, "Advanced", "Telegraph Operator", NULL);
+          menu_cell_basic_draw(ctx, cell_layer, "Hard", "Expert", NULL);
           break;
       }
   }
@@ -126,17 +130,6 @@ static void difficulty_menu_select_callback(MenuLayer *menu_layer, MenuIndex *ce
       switch_to_reference_page(s_main_window);
       break;
     case 1:
-      // Use the row to specify which item we'll draw
-      switch (cell_index->row) {
-        case 0:
-          break;
-        case 1:
-          unit_length = 150;
-          break;
-        case 2: 
-          unit_length = 100;
-          break;
-      }
       switch_to_question_page(s_main_window);   
       break;
   }
@@ -320,7 +313,7 @@ static void switch_to_result_page(Window *window, int indexOfGivenAnswer) {
   
   strcat(result_string, "\nThe answer was: \n");
   strcat(result_string, getCorrectAnswer(indexOfGivenAnswer));
-  strcat(result_string, "\n\nScore: ");
+  strcat(result_string, "\nScore: ");
   
   if (score == 0) {
     strcat(result_string, "You suck!");
@@ -329,6 +322,18 @@ static void switch_to_result_page(Window *window, int indexOfGivenAnswer) {
     int_to_string(sscore, score);
     strcat(result_string, sscore);
   }
+   
+  if (high_score < score) {
+     high_score_need_update = 1;
+     high_score = score;
+  }
+
+  strcat(result_string, "\nHigh Score: ");
+  char shigh_score[20];
+  int_to_string(shigh_score, high_score);
+  strcat(result_string, shigh_score);
+   
+  printf("high score is: %d\n", high_score);
   
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_frame(window_layer);
@@ -388,6 +393,8 @@ static void switch_to_reference_page(Window *window) {
 static void main_window_load(Window *window) {
   randomize_correct_answer_index();
   switch_to_difficulty_page(window);
+  
+  printf("%s", MORSE_CODES[90]);
 }
 
 /* boiler plate to start UI */
@@ -399,6 +406,7 @@ static void main_window_unload(Window *window) {
 //   text_layer_destroy(s_result_layer);
 }
 static void init() {
+  high_score = read_high_score_from_storage();
   s_main_window = window_create();
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = main_window_load,
@@ -408,6 +416,9 @@ static void init() {
 }
 static void deinit() {
   window_destroy(s_main_window);
+  if(high_score_need_update == 1) {
+     write_high_score_to_storage(high_score);
+  }
 }
 int main(void) {
   init();
