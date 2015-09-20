@@ -224,7 +224,7 @@ static void switch_to_question_page(Window *window) {
   
   Level current_level = levels[level-1];
   char* str = current_level.answers[current_level.index_correct_answer];
-//   call_vib(str);
+  call_vib(str);
 }
 
 static void switch_to_choose_answer_page(Window *window) {
