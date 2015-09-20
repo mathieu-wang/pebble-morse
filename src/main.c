@@ -1,6 +1,8 @@
 #include "pebble.h"
 #include "main.h"
 #include "string_manipulation.h"
+#include "morse.h"
+#include "level.h"
 #include <stdbool.h>
 
 #define NUM_MENU_SECTIONS 2
@@ -117,15 +119,17 @@ static void answer_menu_draw_header_callback(GContext* ctx, const Layer *cell_la
 
 static void answer_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
   // Use the row to specify which item we'll draw
+  
+  Level current_level = levels[level-1];
   switch (cell_index->row) {
     case 0:
-      menu_cell_basic_draw(ctx, cell_layer, "Answer 1", NULL, NULL);
+      menu_cell_basic_draw(ctx, cell_layer, current_level.answers[0], NULL, NULL);
       break;
     case 1:
-      menu_cell_basic_draw(ctx, cell_layer, "Answer 2", NULL, NULL);
+      menu_cell_basic_draw(ctx, cell_layer, current_level.answers[1], NULL, NULL);
       break;
     case 2: 
-      menu_cell_basic_draw(ctx, cell_layer, "Answer 3", NULL, NULL);
+      menu_cell_basic_draw(ctx, cell_layer, current_level.answers[2], NULL, NULL);
       break;
   }
 }
@@ -183,30 +187,18 @@ static void click_config_provider_result_page(void *context) {
 
 /* helper function to check answer */
 static bool isAnswerCorrect(int answerIndex) {
-  switch (answerIndex) {
-    case 0:
-      score += 10;
-      return true;
-    case 1:
-      return false;
-    case 2:
-      return false;
-    default:
-      return false;
+  Level current_level = levels[level-1];
+  if (answerIndex == current_level.index_correct_answer) {
+    score += 10;
+    return true;
+  } else {
+    return false;
   }
 }
 
 static char* getCorrectAnswer(int answerIndex) {
-  switch (answerIndex) {
-    case 0:
-      return "Answer 1";
-    case 1:
-      return "Answer 2";
-    case 2:
-      return "Answer 3";
-    default:
-      return "Error";
-  }
+  Level current_level = levels[level-1];
+  return current_level.answers[current_level.index_correct_answer];
 }
 
 /* encapsulates switching */
@@ -229,6 +221,10 @@ static void switch_to_question_page(Window *window) {
   
   layer_add_child(window_layer, text_layer_get_layer(s_question_layer));
   window_set_click_config_provider(s_main_window, click_config_provider_question_page);
+  
+  Level current_level = levels[level-1];
+  char* str = current_level.answers[current_level.index_correct_answer];
+//   call_vib(str);
 }
 
 static void switch_to_choose_answer_page(Window *window) {
@@ -313,7 +309,8 @@ static void switch_to_difficulty_page(Window *window) {
 
 /* load initial page */
 static void main_window_load(Window *window) {
-    switch_to_difficulty_page(window);
+  randomize_correct_answer_index();
+  switch_to_difficulty_page(window);
 }
 
 /* boiler plate to start UI */
