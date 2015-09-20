@@ -109,7 +109,6 @@ static void difficulty_menu_draw_row_callback(GContext* ctx, const Layer *cell_l
           menu_cell_basic_draw(ctx, cell_layer, "Beginner", "Noobs", NULL);
           break;
         case 1:
-          
           menu_cell_basic_draw(ctx, cell_layer, "Intermediate", "Still a noob", NULL);
           break;
         case 2: 
@@ -127,6 +126,17 @@ static void difficulty_menu_select_callback(MenuLayer *menu_layer, MenuIndex *ce
       switch_to_reference_page(s_main_window);
       break;
     case 1:
+      // Use the row to specify which item we'll draw
+      switch (cell_index->row) {
+        case 0:
+          break;
+        case 1:
+          unit_length = 150;
+          break;
+        case 2: 
+          unit_length = 100;
+          break;
+      }
       switch_to_question_page(s_main_window);   
       break;
   }
@@ -378,8 +388,6 @@ static void switch_to_reference_page(Window *window) {
 static void main_window_load(Window *window) {
   randomize_correct_answer_index();
   switch_to_difficulty_page(window);
-  
-  printf("%s", MORSE_CODES[90]);
 }
 
 /* boiler plate to start UI */

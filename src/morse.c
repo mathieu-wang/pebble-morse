@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "morse.h"
 
-const uint32_t const unit_length = 200; //ms
+uint32_t unit_length = 200; //ms
 char* MORSE_CODES[] = {
   "",       /* 0: NOT USED */
   "",       /* 1: NOT USED */
@@ -258,7 +258,7 @@ char* MORSE_CODES[] = {
   "",       /* 252: NOT USED */
   "",       /* 253: NOT USED */
   "",       /* 254: NOT USED */
-  ""        /* 255: NOT USED */
+  "",       /* 255: NOT USED */
 };
 
 char* getMorseCode(char c) {
@@ -267,7 +267,7 @@ char* getMorseCode(char c) {
     return MORSE_CODES[index];
 }
 
-void vibrate(const uint32_t const segments[]) {
+void vibrate(const uint32_t segments[]) {
   VibePattern pat = {
     .durations = segments,
     .num_segments = 2,
@@ -284,28 +284,28 @@ void vibrate(const uint32_t const segments[]) {
 
 void dot() {
   // Vibe pattern: ON for unit_length ms, OFF for unit_length ms
-  const uint32_t const segments[] = {unit_length, unit_length};
+  const uint32_t segments[] = {unit_length, unit_length};
   vibrate(segments);
 }
 
 void dash() {
   // Vibe pattern: ON for 3 unit_length ms, OFF for unit_length ms
 //   const uint32_t const segments[] = { 3* unit_length, unit_length, unit_length};
-  const uint32_t const segments[] = {3* unit_length, unit_length};
+  const uint32_t segments[] = {3* unit_length, unit_length};
   vibrate(segments);
 }
 
 void letter_gap() {
   // Vibe pattern: OFF for 2 unit_length ms
   // letter gaps always follow element gaps (included in dot and dash), so total of 1+2=3 units long   
-  const uint32_t const segments[] = {0, 2 * unit_length};
+  const uint32_t segments[] = {0, 2 * unit_length};
   vibrate(segments);
 }
 
 void word_gap() {
   // Vibe pattern: OFF for 4 unit_length ms
   //word gaps always follow letter gaps, so total of 1+2+4=7 units long
-  const uint32_t const segments[] = {0, 4 * unit_length};
+  const uint32_t segments[] = {0, 4 * unit_length};
   vibrate(segments);
 }
 
