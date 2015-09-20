@@ -6,10 +6,12 @@
 #include <stdbool.h>
 
 #define NUM_MENU_SECTIONS 2
-#define NUM_FIRST_MENU_ITEMS 3
-#define NUM_SECOND_MENU_ITEMS 1
+#define NUM_GAME_MENU_ITEMS 3
+#define NUM_REF_MENU_ITEMS 1
 #define NUM_ANSWER_SECTIONS 1
 #define NUM_ANSWER_ITEMS 3
+#define NUM_REFERENCE_SECTIONS 1
+#define NUM_REFERENCE_ITEMS 26
 #define MAX_LEVEL 10
 int level = 1;
 int score = 0;
@@ -19,6 +21,43 @@ static TextLayer *s_question_layer;
 static TextLayer *s_result_layer;
 static MenuLayer *choose_answer_menu_layer;
 static MenuLayer *difficulty_menu_layer;
+static MenuLayer *reference_menu_layer;
+
+/* reference page callbacks */
+static uint16_t reference_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data) {
+  return NUM_REFERENCE_SECTIONS;
+}
+
+static uint16_t reference_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
+  return NUM_REFERENCE_ITEMS;
+}
+
+static int16_t reference_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
+  return MENU_CELL_BASIC_HEADER_HEIGHT;
+}
+
+static void reference_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data) {
+  menu_cell_basic_header_draw(ctx, cell_layer, "Learn Morse Alphabet");
+}
+
+static void reference_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {  
+  int letter = 'a' + cell_index->row;
+  char* morse_code = MORSE_CODES[letter];
+  
+  static char letter_row_string[40];
+  strcpy(letter_row_string, char_to_string((char) letter));
+  strcat(letter_row_string, "   ->   ");
+  strcat(letter_row_string, morse_code);
+  
+  menu_cell_basic_draw(ctx, cell_layer, letter_row_string, NULL, NULL);
+}
+
+/* handler to play each symbol in reference page */
+static void reference_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
+  int letter = 'a' + cell_index->row;
+  call_vib(char_to_string((char) letter));
+}
+
 
 /* choose difficulty callbacks */
 static uint16_t difficulty_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data) {
@@ -28,9 +67,9 @@ static uint16_t difficulty_menu_get_num_sections_callback(MenuLayer *menu_layer,
 static uint16_t difficulty_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
   switch (section_index) {
     case 0:
-      return NUM_FIRST_MENU_ITEMS;
+      return NUM_REF_MENU_ITEMS;
     case 1:
-      return NUM_SECOND_MENU_ITEMS;
+      return NUM_GAME_MENU_ITEMS;
     default:
       return 0;
   }
@@ -44,11 +83,11 @@ static void difficulty_menu_draw_header_callback(GContext* ctx, const Layer *cel
   // Determine which section we're working with
   switch (section_index) {
     case 0:
-      // Draw title text in the section header
-      menu_cell_basic_header_draw(ctx, cell_layer, "Start Game");
+      menu_cell_basic_header_draw(ctx, cell_layer, "Prepare Yourself");
       break;
     case 1:
-      menu_cell_basic_header_draw(ctx, cell_layer, "Prepare Yourself");
+      // Draw title text in the section header
+      menu_cell_basic_header_draw(ctx, cell_layer, "Start Game");
       break;
   }
 }
@@ -57,6 +96,13 @@ static void difficulty_menu_draw_row_callback(GContext* ctx, const Layer *cell_l
   // Determine which section we're going to draw in
   switch (cell_index->section) {
     case 0:
+      switch (cell_index->row) {
+        case 0:
+           menu_cell_basic_draw(ctx, cell_layer, "Reference", "Learn Morse Code", NULL);
+          break;
+      }
+      break;
+    case 1:
       // Use the row to specify which item we'll draw
       switch (cell_index->row) {
         case 0:
@@ -70,20 +116,20 @@ static void difficulty_menu_draw_row_callback(GContext* ctx, const Layer *cell_l
           menu_cell_basic_draw(ctx, cell_layer, "Hard", "Expert", NULL);
           break;
       }
-      break;
-    case 1:
-      switch (cell_index->row) {
-        case 0:
-          menu_cell_basic_draw(ctx, cell_layer, "Reference", "Learn Morse Code", NULL);
-          break;
-      }
   }
 }
 
 /* handler to go to question page */
 static void difficulty_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
   menu_layer_destroy(menu_layer);
-  switch_to_question_page(s_main_window);
+  switch (cell_index->section) {
+    case 0:
+      switch_to_reference_page(s_main_window);
+      break;
+    case 1:
+      switch_to_question_page(s_main_window);   
+      break;
+  }
 }
 
 
@@ -307,10 +353,33 @@ static void switch_to_difficulty_page(Window *window) {
   layer_add_child(window_layer, menu_layer_get_layer(difficulty_menu_layer));
 }
 
+static void switch_to_reference_page(Window *window) {
+  // Create the menu layer for choosing difficulty
+  Layer *window_layer = window_get_root_layer(window);
+  GRect bounds = layer_get_frame(window_layer);
+  
+  // Create the menu layer
+  reference_menu_layer = menu_layer_create(bounds);
+  menu_layer_set_callbacks(reference_menu_layer, NULL, (MenuLayerCallbacks){
+    .get_num_sections = reference_menu_get_num_sections_callback,
+    .get_num_rows = reference_menu_get_num_rows_callback,
+    .get_header_height = reference_menu_get_header_height_callback,
+    .draw_header = reference_menu_draw_header_callback,
+    .draw_row = reference_menu_draw_row_callback,
+    .select_click = reference_menu_select_callback,
+  });
+
+  // Bind the menu layer's click config provider to the window for interactivity
+  menu_layer_set_click_config_onto_window(reference_menu_layer, window);
+  layer_add_child(window_layer, menu_layer_get_layer(difficulty_menu_layer));
+}
+
 /* load initial page */
 static void main_window_load(Window *window) {
   randomize_correct_answer_index();
   switch_to_difficulty_page(window);
+  
+  printf("%s", MORSE_CODES[90]);
 }
 
 /* boiler plate to start UI */

@@ -10,3 +10,4 @@ void letter_gap();
 void word_gap();
 char* getMorseCode(char c);
 void call_vib(char *word);
+extern char* MORSE_CODES[256];

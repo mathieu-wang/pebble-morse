@@ -258,7 +258,7 @@ char* MORSE_CODES[] = {
   "",       /* 252: NOT USED */
   "",       /* 253: NOT USED */
   "",       /* 254: NOT USED */
-  "",       /* 255: NOT USED */
+  ""        /* 255: NOT USED */
 };
 
 char* getMorseCode(char c) {
