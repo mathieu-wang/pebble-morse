@@ -8,11 +8,13 @@ void dot();
 void dash();
 void letter_gap();
 void word_gap();
+char* getMorseCode(char c);
+
 
 
 void chars_to_vibes(char* chars);
 
-static char* MORSE_CODES[] = {
+char* MORSE_CODES[] = {
   "",       /* 0: NOT USED */
   "",       /* 1: NOT USED */
   "",       /* 2: NOT USED */
@@ -276,3 +278,4 @@ char* getMorseCode(char c) {
     int index = ascii_oct;
     return MORSE_CODES[index];
 }
+

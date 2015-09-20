@@ -43,3 +43,5 @@ void word_gap() {
   const uint32_t const segments[] = {0, 4 * unit_length};
   vibrate(segments);
 }
+
+
