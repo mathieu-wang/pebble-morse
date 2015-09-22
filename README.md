@@ -25,4 +25,8 @@ To help the players learn, the app also has a reference page that shows the patt
 
 #Authors
 
-Ze Qian Zhang, Mathieu Wang, Cheng Gong
+Ze Qian Zhang
+
+Mathieu Wang
+
+Cheng Gong
